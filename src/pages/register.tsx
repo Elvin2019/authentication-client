@@ -72,7 +72,6 @@ function RegisterForm() {
             value={name}
             onChange={(e) => setName(e.target.value)}
             required
-            
           />
         </div>
         <div className="mb-4">
