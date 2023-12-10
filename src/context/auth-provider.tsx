@@ -1,13 +1,14 @@
-import React, { createContext, useContext } from "react";
+import React, { createContext, useContext, useEffect } from "react";
 import { useLocalStorage } from "../hooks/use-local-storage";
-import { LoginResponse, UserInfo } from "../models/auth.model";
-import { localStorageData } from "../config/storage";
+import { Auth, LoginResponse, UserInfo } from "../models/auth.model";
 import AuthRepository from "../repositories/auth.respository";
+import { useNavigate } from "react-router-dom";
 
 interface AuthContextInterface {
   login: (email: string, password: string) => Promise<any>;
   logout: () => Promise<any>;
   userInfo?: UserInfo;
+  isLoggingIn: boolean;
 }
 
 export const AuthContext = createContext({} as AuthContextInterface);
@@ -18,27 +19,36 @@ type AuthProviderProps = {
 const initialValue = {
   refreshToken: null,
   token: null,
-  maxAge: null,
 };
 const AuthProvider = ({ children }: AuthProviderProps) => {
-  const [auth, setAuth] = useLocalStorage<LoginResponse>("auth", initialValue);
-  const activationToken = localStorageData.loadData('activation-token', '');
-  // const { data: userInfo, refetch } = useUserInfo(activationToken ? activationToken : auth.token);
-  // const { isLoggingIn, login } = useLogin();
-  // const { isLoggingOut } = useLogout();
+  const [auth, setAuth] = useLocalStorage<Auth>("auth", initialValue);
+  const [userInfo, setUserInfo] = useLocalStorage<UserInfo | undefined>("me", undefined);
+  const [isLoggingIn, setIsLoggingIn] = React.useState(false);
+  const navigate = useNavigate();
 
-  const hasRole = (roles?: string[]) => {
-    if (!roles || roles.length === 0) {
-      return true;
-    }
-    // return roles.includes(userInfo.role);
-    return true;
-  };
   const handleLogin = async (email: string, password: string) => {
-    const response = await AuthRepository.login({ email, password });
-    setAuth(response);
-    return response;
+    setIsLoggingIn(true);
+    try {
+      const response = await AuthRepository.login({ email, password });
+      setAuth(response);
+      navigate("/");
+    }
+    catch(error:any){
+      if(error.response.data.message){
+        alert(error.response.data.message);
+      }
+    }
+    setIsLoggingIn(false);
   };
+
+  useEffect(()=>{
+    if(auth.token){
+       AuthRepository.me().then((me)=>{
+         setUserInfo(me);
+       })
+    }
+  }, [auth])
+
 
   const handleLogout = async () => {
     setAuth(initialValue);
@@ -49,11 +59,11 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
   return (
     <AuthContext.Provider
       value={{
-        // isLoggingIn,
+        isLoggingIn,
         // isLoggingOut,
         login: handleLogin,
         logout: handleLogout,
-        // userInfo,
+        userInfo,
         // refetch,
       }}
     >

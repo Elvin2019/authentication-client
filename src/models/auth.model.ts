@@ -1,4 +1,8 @@
 export interface LoginResponse {
+  response : Auth
+}
+
+export interface Auth {
   token: string | null;
 }
 

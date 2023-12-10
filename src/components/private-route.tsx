@@ -1,22 +1,10 @@
-import { Route, RouteProps, Navigate } from "react-router-dom";
+import { RouteProps, Navigate, Outlet } from "react-router-dom";
 import { useAuth } from "../context/auth-provider";
 
-type PrivateRouteProps = {
-  roles?: string[];
-} & RouteProps;
-
-const PrivateRoute = ({
-  children,
-  roles,
-  ...routeProps
-}: PrivateRouteProps) => {
+const PrivateRoute: React.FC<RouteProps> = ({ element, ...rest }) => {
   const { userInfo } = useAuth();
-
-  if (!userInfo) {
-    return <Navigate to="/login" replace />;
-  }
-
-  return <Route {...routeProps}>{children}</Route>;
+  console.log(userInfo)
+  return userInfo ? <Outlet /> : <Navigate to="/login" />;
 };
 
 export default PrivateRoute;

@@ -1,24 +1,20 @@
-import { Route,Routes } from "react-router-dom";
-import Login from "./pages/login";
-import Register from "./pages/register";
-import WelcomePage from "./pages/welcome-page";
+import { Route, Routes } from "react-router-dom";
+import Login from "./pages/login.page";
+import Register from "./pages/register.page";
+import WelcomePage from "./pages/welcome.page";
 import PrivateRoute from "./components/private-route";
-  
+import { useAuth } from "./context/auth-provider";
+
 const AppRoutes = () => {
-    return (
-      <Routes>
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route
-          path="/"
-          element={
-            <PrivateRoute>
-              <WelcomePage />
-            </PrivateRoute>
-          }
-        />
-      </Routes>
-    );
-  };
+  return (
+    <Routes>
+      <Route path="/" element={<PrivateRoute />}>
+        <Route path="/" element={<WelcomePage />} />
+      </Route>
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
+    </Routes>
+  );
+};
 
 export default AppRoutes;
