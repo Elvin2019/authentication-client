@@ -1,9 +1,9 @@
 import axios, { AxiosHeaders } from "axios";
 import { localStorageData } from "./storage";
-import { LoginResponse } from "../models/auth.model";
+import { Auth } from "../models/auth.model";
 
 export const loadAuth = () =>
-  localStorageData.loadData<LoginResponse>("auth", {
+  localStorageData.loadData<Auth>("auth", {
     token: null,
   });
 
@@ -17,7 +17,6 @@ const getHeader = () => {
 };
 
 const baseURL = 'http://localhost:4001';
-console.log({baseURL})
 const axiosInstance = axios.create();
 axiosInstance.defaults.headers.common = getHeader();
 axiosInstance.defaults.baseURL = baseURL;

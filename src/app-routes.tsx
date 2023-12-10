@@ -3,7 +3,6 @@ import Login from "./pages/login.page";
 import Register from "./pages/register.page";
 import WelcomePage from "./pages/welcome.page";
 import PrivateRoute from "./components/private-route";
-import { useAuth } from "./context/auth-provider";
 
 const AppRoutes = () => {
   return (

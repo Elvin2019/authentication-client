@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect } from "react";
+import React, { createContext, useEffect } from "react";
 import { useLocalStorage } from "../hooks/use-local-storage";
 import { Auth, UserInfo } from "../models/auth.model";
 import AuthRepository from "../repositories/auth.repository";
@@ -41,7 +41,6 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
   };
 
   useEffect(()=>{
-    console.log({auth})
     if(auth.token){
        AuthRepository.me().then((me)=>{
          setUserInfo(me);
@@ -50,6 +49,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     } else {
       setUserInfo(undefined);
     }
+    // eslint-disable-next-line
   }, [auth])
 
 
@@ -63,21 +63,13 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     <AuthContext.Provider
       value={{
         isLoggingIn,
-        // isLoggingOut,
         login: handleLogin,
         logout: handleLogout,
         userInfo,
-        // refetch,
       }}
     >
       {children}
     </AuthContext.Provider>
   );
 };
-
-export function useAuth() {
-  return useContext(AuthContext);
-}
-
 export default AuthProvider;
- 

@@ -1,5 +1,5 @@
 import { Player } from "@lottiefiles/react-lottie-player";
-import { useAuth } from "../context/auth-provider";
+import { useAuth } from "../context/use-auth";
 
 const WelcomePage = () => {
   const { userInfo, logout } = useAuth();

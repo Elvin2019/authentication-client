@@ -1,10 +1,10 @@
 import { Player } from "@lottiefiles/react-lottie-player";
-import { useAuth } from "../context/auth-provider";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import InputField from "../components/input";
 import { Link } from "react-router-dom";
 import ActionButton from "../components/buttons";
+import { useAuth } from "../context/use-auth";
 
 const validationSchema = Yup.object({
   email: Yup.string()
