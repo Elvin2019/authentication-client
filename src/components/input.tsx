@@ -18,6 +18,7 @@ const InputField = ({
         className="text-sm w-full px-4 py-2 border border-solid border-gray-300 rounded"
         type={type}
         placeholder={placeholder}
+        autoComplete="off"
         {...field}
       />
       {formik.touched[name] && formik.errors[name] && (

@@ -5,7 +5,7 @@ import * as Yup from "yup";
 import InputField from "../components/input";
 import { Link } from "react-router-dom";
 import ActionButton from "../components/buttons";
-import AuthRepository from "../repositories/auth.respository";
+import AuthRepository from "../repositories/auth.repository";
 import { useState } from "react";
 
 const validationSchema = Yup.object({

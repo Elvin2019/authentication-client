@@ -3,7 +3,6 @@ import { useAuth } from "../context/auth-provider";
 
 const PrivateRoute: React.FC<RouteProps> = ({ element, ...rest }) => {
   const { userInfo } = useAuth();
-  console.log(userInfo)
   return userInfo ? <Outlet /> : <Navigate to="/login" />;
 };
 

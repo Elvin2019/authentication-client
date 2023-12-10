@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useEffect } from "react";
 import { useLocalStorage } from "../hooks/use-local-storage";
-import { Auth, LoginResponse, UserInfo } from "../models/auth.model";
-import AuthRepository from "../repositories/auth.respository";
+import { Auth, UserInfo } from "../models/auth.model";
+import AuthRepository from "../repositories/auth.repository";
 import { useNavigate } from "react-router-dom";
 
 interface AuthContextInterface {
@@ -31,7 +31,6 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     try {
       const response = await AuthRepository.login({ email, password });
       setAuth(response);
-      navigate("/");
     }
     catch(error:any){
       if(error.response.data.message){
@@ -42,17 +41,21 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
   };
 
   useEffect(()=>{
+    console.log({auth})
     if(auth.token){
        AuthRepository.me().then((me)=>{
          setUserInfo(me);
+         navigate("/");
        })
+    } else {
+      setUserInfo(undefined);
     }
   }, [auth])
 
 
   const handleLogout = async () => {
-    setAuth(initialValue);
     const response = await AuthRepository.logout();
+    setAuth(initialValue);
     return response;
   };
 
